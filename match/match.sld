@@ -7,7 +7,6 @@
 	  (match compile-pattern)
 	  (match interpret-tree))
 
-  (export match
-  	  compile-patterns)
+  (export define-rewrite-system)
 
   (include "match.scm"))

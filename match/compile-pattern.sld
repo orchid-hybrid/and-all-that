@@ -1,6 +1,7 @@
 (define-library (match compile-pattern)
 
   (import (scheme base)
+  (scheme write)
           (match box)
 	  (match trie))
 

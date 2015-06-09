@@ -12,6 +12,7 @@
 ;;       | (decons)
 
 (define (compile-pattern box pat)
+;  (display pat) (newline)
   (cond ((var? pat) (compile-var box pat))
 	((functor? pat) (compile-functor box (car pat) (cdr pat)))
 	(else (error "Invalid pattern"))))
@@ -38,7 +39,7 @@
 		(compile-args box (cdr args))))))
 
 
-(define (compile-patterns patterns bodies)
-  (merge (map (lambda (pattern body)
-		(append (compile-pattern (make-box '()) pattern) (list `(execute ,body))))
-	      patterns bodies)))
+(define (compile-patterns patterns guards bodies)
+  (merge (map (lambda (pattern guard body)
+		(append (compile-pattern (make-box '()) pattern) (list `(guard ,guard) `(execute ,body))))
+	      patterns guards bodies)))
