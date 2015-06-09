@@ -2,10 +2,17 @@
   (syntax-rules ()
     ((define-rewrite-system <name> <clause> ...)
      (define <name>
-       (lambda (t)
-	 (let ((s #t))
-	   (let ((r (match/rewrite t s () <clause> ...)))
-	     (values s r))))))))
+       (letrec ((reduce (lambda (t)
+                          (let ((s #t))
+                            (let ((r (match/rewrite t s () <clause> ...)))
+                              (if s
+                                  (reduce* r)
+                                  (values r s))))))
+                (reduce* (lambda (t)
+                           (cond
+                            ((list? t) (reduce (cons (car t) (map reduce* (cdr t)))))
+                            (else (reduce t))))))
+         reduce*)))))
 
 (define-syntax match/rewrite
   (syntax-rules (where -->)

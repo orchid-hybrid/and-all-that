@@ -11,11 +11,11 @@
 
 (define-rewrite-system f
   ((a) --> (b))
-  ((b) --> (a))
+  ((b) --> (c))
   ((f x x) --> (f))
   ((f x y) --> (f! x y)))
 
-(let-values (((s r) (f (read))))
+(let-values (((r s) (f (read))))
   (display s)
   (newline)
   (display r)
