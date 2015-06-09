@@ -38,8 +38,12 @@
 	(append (cons '(decons) a)
 		(compile-args box (cdr args))))))
 
+(define (template exp)
+  (cond
+    ((list? exp) `(list ',(car exp) . ,(map template (cdr exp))))
+    (else exp)))
 
 (define (compile-patterns patterns guards bodies)
-  (merge (map (lambda (pattern guard body)
-		(append (compile-pattern (make-box '()) pattern) (list `(guard ,guard) `(execute ,body))))
-	      patterns guards bodies)))
+  (merge (reverse (map (lambda (pattern guard body)
+		(append (compile-pattern (make-box '()) pattern) (list `(guard ,guard) `(execute ,(template body)))))
+	      patterns guards bodies))))

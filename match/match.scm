@@ -18,11 +18,11 @@
 
 (define-syntax match
   (syntax-rules (else)
-    ((match t (<pat> <guard> <body> ...) ... (else <else> ...))
+    ((match t (<pat> <guard> <body>) ... (else <else> ...))
      (let ((stack (list t)))
-       (match-expander (<pat> ...) (<guard> ...) ((begin <body> ...) ...) stack (begin <else> ...))))
-    ((match t (<pat> <guard> <body> ...) ...)
-     (match t (<pat> <guard> <body> ...) ... (else (error "pattern match fell through"))))))
+       (match-expander (<pat> ...) (<guard> ...) (<body> ...) stack (begin <else> ...))))
+    ((match t (<pat> <guard> <body>) ...)
+     (match t (<pat> <guard> <body>) ... (else (error "pattern match fell through"))))))
 
 (define-syntax match-expander
   (er-macro-transformer

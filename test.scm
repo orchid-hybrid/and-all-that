@@ -10,10 +10,10 @@
 ;;     ((b e x) (list 'b e '=/=))))
 
 (define-rewrite-system f
-  ((a) --> '(b))
-  ((b) --> '(a))
-  ((f x x) --> '(f))
-  ((f x y) --> `(f! ,x ,y)))
+  ((a) --> (b))
+  ((b) --> (a))
+  ((f x x) --> (f))
+  ((f x y) --> (f! x y)))
 
 (let-values (((s r) (f (read))))
   (display s)
