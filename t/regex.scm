@@ -39,4 +39,4 @@
   ((seq r (or r1 r2)) --> (or (seq r r1) (seq r r2))))
 
 
-(display (regex '(d #\c (kleene #\c))))
+(display (regex '(d #\c (kleene (symbol #\c)))))
