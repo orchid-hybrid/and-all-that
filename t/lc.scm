@@ -4,19 +4,39 @@
 
 (define-rewrite-system lc
   ((eval (quote x) _) --> x)
+  ((eval (int x) _) --> (int x))
 
-  ((eval (var a) (env (nil))) --> (error))
-  ((eval (var a) (env (c (b a v) e))) --> v)
-  ((eval (var a) (env (c _ r))) --> (eval (var v) (env r)))
+  ((eval (add x y) e) --> (add% (eval x e) (eval y e)))
+  ((add% (int x) (int y)) --> (scheme (+ x y)))
 
-  ((eval (lam p b) (env e)) --> (clo e p b))
+  ((eval (var a) (nil)) --> (error))
+  ((eval (var a) (c (c a v) e)) --> v)
+  ((eval (var a) (c _ r)) --> (eval (var v) r))
 
-  ((eval (app f a) e) --> (app1 (eval f e) (eval a e)))
-  ((app1 (clo ce p b) a) --> (eval b (env (c (b p a) ce)))))
+  ((eval (lam p b) e) --> (clo e p b))
 
-(display (lc '(eval (var (a)) (env (nil)))))
+  ((eval (app f a) e) --> (app% (eval f e) (eval a e)))
+  ((app% (clo ce p b) a) --> (eval b (c (c p a) ce)))
+  
+  ((eval (equal? a b) e) --> (equal?% (eval a e) (eval b e)))
+  ((equal?% a a) --> (true))
+  ((equal?% a b) --> (false)))
+
+(display (lc '(eval (var (a)) (nil))))
+;; (error)
 (newline)
-(display (lc '(eval (lam (x) (var (x))) (env (nil)))))
+(display (lc '(eval (lam (x) (var (x))) (nil))))
+;; (clo (nil) (x) (var (x)))
 (newline)
-(display (lc '(eval (app (lam (x) (var (x))) (quote (q))) (env (nil)))))
+(display (lc '(eval (app (lam (x) (var (x))) (quote (q))) (nil))))
+;; (q)
 (newline)
+(display (lc '(eval (app (lam (f) (app (var (f)) (quote (q)))) (lam (x) (var (x)))) (nil))))
+;; (q)
+(newline)
+(display (lc '(eval (add (int 1) (int 2)) (nil))))
+;; => 3
+(newline)
+(display (lc '(eval (app (lam (x) (add (var (x)) (int 2))) (int 1)) (nil))))
+(newline)
+
