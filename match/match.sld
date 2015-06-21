@@ -2,6 +2,7 @@
 
   (import (scheme base)
   	  (scheme cxr)
+          (rnrs eval)
 	  (sagittarius) ;; for er-macro-transformer
   	  (match trie)
 	  (match compile-pattern)

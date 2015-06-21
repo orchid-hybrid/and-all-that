@@ -20,7 +20,11 @@
   
   ((eval (equal? a b) e) --> (equal?% (eval a e) (eval b e)))
   ((equal?% a a) --> (true))
-  ((equal?% a b) --> (false)))
+  ((equal?% a b) where (not (equal? a b)) --> (false))
+
+  ((eval (if t c a) e) --> (eval (if% (eval t e) c a) e))
+  ((if% (true) c a) --> c)
+  ((if% (false) c a) --> a))
 
 (display (lc '(eval (var (a)) (nil))))
 ;; (error)
@@ -28,15 +32,18 @@
 (display (lc '(eval (lam (x) (var (x))) (nil))))
 ;; (clo (nil) (x) (var (x)))
 (newline)
-(display (lc '(eval (app (lam (x) (var (x))) (quote (q))) (nil))))
+(display (lc '(eval (app (lam (x) (var (x))) '(q)) (nil))))
 ;; (q)
 (newline)
-(display (lc '(eval (app (lam (f) (app (var (f)) (quote (q)))) (lam (x) (var (x)))) (nil))))
+(display (lc '(eval (app (lam (f) (app (var (f)) '(q))) (lam (x) (var (x)))) (nil))))
 ;; (q)
 (newline)
 (display (lc '(eval (add (int 1) (int 2)) (nil))))
 ;; => 3
 (newline)
 (display (lc '(eval (app (lam (x) (add (var (x)) (int 2))) (int 1)) (nil))))
+;; => 3
 (newline)
-
+(display (lc '(eval (if (equal? '(q) '(q)) '(a) '(b)) (nil))))
+;; => (a)
+(newline)

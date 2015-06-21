@@ -7,7 +7,9 @@
                             (let ((r (match/rewrite t s () <clause> ...)))
                               (if s
                                   (reduce* r)
-                                  (values r s))))))
+                                  (if (and (pair? r) (eq? 'scheme (car r)))
+                                      (values (eval (cadr r) '()) s)
+                                      (values r s)))))))
                 (reduce* (lambda (t)
                            (cond
                             ((list? t) (reduce (cons (car t) (map reduce* (cdr t)))))
