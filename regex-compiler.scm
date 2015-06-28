@@ -12,7 +12,10 @@
 
 
 (define (derivatives r alphabet)
-  (map (lambda (c) (cons c (regex-simplify (regex `(d ,c ,r))))) alphabet))
+  (filter (lambda (entry)
+	    (not (equal? '(empty) (cdr entry))))
+	  (map (lambda (c) (cons c (regex-simplify (regex `(d ,c ,r)))))
+	       alphabet)))
 
 (define (compile-regex r alphabet)
   (let loop ((g empty-graph)
