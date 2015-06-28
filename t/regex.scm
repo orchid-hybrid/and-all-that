@@ -2,9 +2,9 @@
 (define-rewrite-system regex
   ((v (empty)) --> (false))
   ((v (epsilon)) --> (true))
-  ((v (symbol _)) --> (true))
+  ((v (symbol _)) --> (false))
   ((v (seq r s)) --> (and (v r) (v s)))
-  ((v (kleene r)) --> (false))
+  ((v (kleene r)) --> (true))
   ((v (or r s)) --> (or (v r) (v s)))
 
   ((v1 r) --> (v1r (v r)))

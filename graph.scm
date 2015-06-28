@@ -10,10 +10,7 @@
     (values (if found-a-b
 		(insert-edge-arc g a b e)
 		(cons (list a b (list e)) g))
-	    found-b))
-  
-  (values (insert-edge-helper g a b e)
-	  (find (lambda (entry) (equal? b (cadr entry))))))
+	    found-b)))
 
 (define (search-graph g a b)
   ;; search through the graph to check if there is already an edge for a-b
@@ -24,7 +21,7 @@
   ;; 2. found b?
   (let loop ((found-b #f) (g* g))
     (if (null? g*)
-	(values #f #t)
+	(values #f found-b)
 	(let ((entry (car g*)))
 	  (if (equal? b (cadr entry))
 	      (if (equal? a (car entry))
