@@ -44,6 +44,12 @@
     (else exp)))
 
 (define (compile-patterns patterns guards bodies)
-  (merge (reverse (map (lambda (pattern guard body)
-		(append (compile-pattern (make-box '()) pattern) (list `(guard ,guard) `(execute ,(template body)))))
-	      patterns guards bodies))))
+  (let ((r
+	 (merge (reverse (map (lambda (pattern guard body)
+				(append (compile-pattern (make-box '()) pattern)
+					(list `(guard ,guard)
+					      `(execute ,(template body)))))
+			      patterns guards bodies)))))
+    ;(display (list 'merge r)) (newline)
+
+    r))

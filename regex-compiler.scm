@@ -8,7 +8,7 @@
 (define r1 '(seq (symbol #\1) (seq (kleene (symbol #\0)) (symbol #\1))))
 
 ;(display (regex-simplify (regex '(d #\c (kleene (symbol #\c))))))
-(display (regex-simplify '(or (epsilon) (empty))))
+;(display (regex-simplify '(or (epsilon) (empty))))
 
 
 (define (derivatives r alphabet)
@@ -17,7 +17,7 @@
 (define (compile-regex r alphabet)
   (let loop ((g empty-graph)
 	     (work-list (list r)))
-    (print "tick")
+    ;(print "tick")
     (if (null? work-list)
 	g
 	(let* ((r (car work-list))
