@@ -1,6 +1,3 @@
-(import (scheme base)
-        (scheme write)
-        (match match))
 
 (define-rewrite-system regex
   ((v (empty)) --> (false))
@@ -16,13 +13,14 @@
 
   ((d a (empty)) --> (empty))
   ((d a (epsilon)) --> (empty))
+  ((d a (any)) --> (epsilon))
   ((d a (symbol a1)) where (eq? a a1) --> (epsilon))
   ((d a (symbol _)) --> (empty))
   ((d a (seq r s)) --> (or (seq (d a r) s) (seq (v1 r) (d a s))))
   ((d a (kleene r)) --> (seq (d a r) (kleene r)))
   ((d a (or r s)) --> (or (d a r) (d a s))))
 
-(define-rewrite-system regex-simp
+(define-rewrite-system regex-simplify
   ((kleene (kleene r)) --> (kleene r))
   ((or (epsilon) (seq r (kleene r))) --> (kleene r))
   ((or (seq r (kleene r)) (epsilon)) --> (kleene r))
@@ -39,4 +37,5 @@
   ((seq r (or r1 r2)) --> (or (seq r r1) (seq r r2))))
 
 
-(display (regex '(d #\c (kleene (symbol #\c)))))
+;(display (regex-simp (regex '(d #\c (kleene (symbol #\c))))))
+

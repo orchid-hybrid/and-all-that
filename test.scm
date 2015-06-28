@@ -12,8 +12,8 @@
 (define-rewrite-system f
   ((a) --> (b))
   ((b) --> (c))
-  ((f x x) --> (f))
-  ((f x y) --> (f! x y)))
+  ((f x x) --> (b x))
+  ((f x y) --> (k x y)))
 
 (let-values (((r s) (f (read))))
   (display s)
