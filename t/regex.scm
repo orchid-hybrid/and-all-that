@@ -3,13 +3,19 @@
   ((v (empty)) --> (false))
   ((v (epsilon)) --> (true))
   ((v (symbol _)) --> (false))
-  ((v (seq r s)) --> (and (v r) (v s)))
+  ((v (seq r s)) --> (b-and (v r) (v s)))
   ((v (kleene r)) --> (true))
-  ((v (or r s)) --> (or (v r) (v s)))
+  ((v (or r s)) --> (b-or (v r) (v s)))
 
   ((v1 r) --> (v1r (v r)))
   ((v1r (true)) --> (epsilon))
   ((v1r (false)) --> (empty))
+
+  ((b-and (true) (true)) --> (true))
+  ((b-and a b) --> (false))
+
+  ((b-or (false) (false)) --> (false))
+  ((b-or a b) --> (true))
 
   ((d a (empty)) --> (empty))
   ((d a (epsilon)) --> (empty))
