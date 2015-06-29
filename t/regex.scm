@@ -2,7 +2,7 @@
   (if (pair? r)
       (case (car r)
 	((empty) '(empty))
-	((epsilon) '(epsilon))
+	((epsilon) '(empty))
 	((any) '(epsilon))
 	((symbol) (if (eq? a (cadr r)) '(epsilon) '(empty)))
 	((seq) `(or (seq ,(d a (cadr r)) ,(caddr r))
