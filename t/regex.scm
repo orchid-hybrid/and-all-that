@@ -1,31 +1,24 @@
+(define (d a r)
+  (case (car r)
+    ((empty) '(empty))
+    ((epsilon) '(epsilon))
+    ((any) '(epsilon))
+    ((symbol) (if (eq? a (cadr r)) '(epsilon) '(empty)))
+    ((seq) `(or (seq ,(d a (cadr r)) (caddr r))
+              (seq ,(v1 r) ,(d a (caddr r)))))
+    ((kleene) `(seq ,(d a (cadr r)) (kleene ,(cadr r))))
+    ((or) `(or ,(d a (cadr r)) ,(d a (caddr r))))))
 
-(define-rewrite-system regex
-  ((v (empty)) --> (false))
-  ((v (epsilon)) --> (true))
-  ((v (symbol _)) --> (false))
-  ((v (seq r s)) --> (b-and (v r) (v s)))
-  ((v (kleene r)) --> (true))
-  ((v (or r s)) --> (b-or (v r) (v s)))
+(define (v r)
+  (case (car r)
+    ((empty) #f)
+    ((epsilon) #t)
+    ((symbol) #f)
+    ((seq) (and (v (cadr r)) (v (caddr r))))
+    ((kleene) #t)
+    ((or) (or (v (cadr r)) (v (caddr r))))))
 
-  ((v1 r) --> (v1r (v r)))
-  ((v1r (true)) --> (epsilon))
-  ((v1r (false)) --> (empty))
-
-  ((b-and (true) (true)) --> (true))
-  ((b-and a b) --> (false))
-
-  ((b-or (false) (false)) --> (false))
-  ((b-or a b) --> (true))
-
-  ((d a (empty)) --> (empty))
-  ((d a (epsilon)) --> (empty))
-  ((d a (any)) --> (epsilon))
-  ((d a (symbol a1)) where (eq? a a1) --> (epsilon))
-  ((d a (symbol a1)) --> (empty))
-;  ((d a (symbol a1)) where (not (eq? a a1)) --> (empty))
-  ((d a (seq r s)) --> (or (seq (d a r) s) (seq (v1 r) (d a s))))
-  ((d a (kleene r)) --> (seq (d a r) (kleene r)))
-  ((d a (or r s)) --> (or (d a r) (d a s))))
+(define (v1 r) (if (v r) '(epsilon) '(empty)))
 
 (define-rewrite-system regex-simplify
   ((kleene (kleene r)) --> (kleene r))
@@ -43,8 +36,7 @@
   ((seq (or r1 r2) r) --> (or (seq r1 r) (seq r2 r)))
   ((seq r (or r1 r2)) --> (or (seq r r1) (seq r r2))))
 
-
-;(display (regex-simp (regex '(d #\c (kleene (symbol #\c))))))
+;; (display (d #\c '(kleene (symbol #\c))))
 
 ;; (merge ((branch (decons)
 ;; 		((branch (compare-equal? 'or)

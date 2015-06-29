@@ -1,4 +1,4 @@
 (define-library (t regex)
   (import (scheme base) (match match))
-  (export regex regex-simplify)
+  (export d v v1 regex-simplify)
   (include "regex.scm"))
