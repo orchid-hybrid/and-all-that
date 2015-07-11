@@ -6,11 +6,11 @@
 	((any) '(epsilon))
 	((symbol) (if (eq? a (cadr r)) '(epsilon) '(empty)))
 	((seq) `(or (seq ,(d a (cadr r)) ,(caddr r))
-		    (seq ,(v1 r) ,(d a (caddr r)))))
+		    (seq ,(v1 (cadr r)) ,(d a (caddr r)))))
 	((kleene) `(seq ,(d a (cadr r)) (kleene ,(cadr r))))
 	((or) `(or ,(d a (cadr r)) ,(d a (caddr r))))
 	(else (error (list "not sure" r))))
-      (error "bad regex")
+      (error (list "bad regex") r)
       ))
 
 (define (v r)
@@ -37,8 +37,9 @@
   ((or r r) --> r)
   ((seq (seq a b) c) --> (seq a (seq b c)))
   ((or (or a b) c) --> (or a (or b c)))
-  ((seq (or r1 r2) r) --> (or (seq r1 r) (seq r2 r)))
-  ((seq r (or r1 r2)) --> (or (seq r r1) (seq r r2))))
+  ;((seq (or r1 r2) r) --> (or (seq r1 r) (seq r2 r)))
+  ;((seq r (or r1 r2)) --> (or (seq r r1) (seq r r2)))
+  )
 
 ;; (display (d #\c '(kleene (symbol #\c))))
 
